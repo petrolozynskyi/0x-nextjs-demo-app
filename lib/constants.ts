@@ -77,7 +77,7 @@ export const POLYGON_TOKENS: Token[] = [
     name: "Matic",
     symbol: "MATIC",
     decimals: 18,
-    address: "0x0000000000000000000000000000000000000000",
+    address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     logoURI: "https://wallet-asset.matic.network/img/tokens/matic.svg",
   }
 ];
@@ -192,4 +192,12 @@ export const POLYGON_TOKENS_BY_ADDRESS: Record<string, Token> = {
     logoURI:
       "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdt.svg",
   },
+  "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE": {
+    chainId: 137,
+    name: "Matic",
+    symbol: "MATIC",
+    decimals: 18,
+    address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    logoURI: "https://wallet-asset.matic.network/img/tokens/matic.svg",
+  }
 };

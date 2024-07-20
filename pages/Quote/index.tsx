@@ -25,7 +25,7 @@ export default function QuoteView({
 }: {
   price: PriceResponse;
   quote: QuoteResponse | undefined;
-  setQuote: (price: any) => void;
+  setQuote: (quote: any) => void;
   takerAddress: Address | undefined;
 }) {
   const sellTokenInfo =
@@ -37,7 +37,7 @@ export default function QuoteView({
   // fetch quote here
   const { address } = useAccount();
 
-  const { isLoading: isLoadingPrice } = useSWR(
+  const { isLoading: isLoadingQuote } = useSWR(
     [
       "/api/quote",
       {
@@ -71,56 +71,52 @@ export default function QuoteView({
     return <div>Getting best quote...</div>;
   }
 
-  console.log("quote", quote);
-  console.log(formatUnits(quote.sellAmount, sellTokenInfo.decimals));
-
   return (
-    <div className="p-3 mx-auto max-w-screen-sm ">
+    <div className="p-3 mx-auto max-w-screen-sm">
       <form>
         <div className="bg-slate-200 dark:bg-slate-800 p-4 rounded-sm mb-3">
           <div className="text-xl mb-2 text-white">You pay</div>
-          <div className="flex items-center text-lg sm:text-3xl text-white">
-            <img
-              alt={sellTokenInfo.symbol}
-              className="h-9 w-9 mr-2 rounded-md"
-              src={sellTokenInfo.logoURI}
-            />
-            <span>{formatUnits(quote.sellAmount, sellTokenInfo.decimals)}</span>
-            <div className="ml-2">{sellTokenInfo.symbol}</div>
-          </div>
+          {sellTokenInfo && (
+            <div className="flex items-center text-lg sm:text-3xl text-white">
+              <img
+                alt={sellTokenInfo.symbol}
+                className="h-9 w-9 mr-2 rounded-md"
+                src={sellTokenInfo.logoURI}
+              />
+              <span>{formatUnits(quote.sellAmount, sellTokenInfo.decimals)}</span>
+              <div className="ml-2">{sellTokenInfo.symbol}</div>
+            </div>
+          )}
         </div>
 
         <div className="bg-slate-200 dark:bg-slate-800 p-4 rounded-sm mb-3">
           <div className="text-xl mb-2 text-white">You receive</div>
-          <div className="flex items-center text-lg sm:text-3xl text-white">
-            <img
-              alt={
-                POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()]
-                  .symbol
-              }
-              className="h-9 w-9 mr-2 rounded-md"
-              src={
-                POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()]
-                  .logoURI
-              }
-            />
-            <span>{formatUnits(quote.buyAmount, buyTokenInfo.decimals)}</span>
-            <div className="ml-2">{buyTokenInfo.symbol}</div>
-          </div>
+          {buyTokenInfo && (
+            <div className="flex items-center text-lg sm:text-3xl text-white">
+              <img
+                alt={buyTokenInfo.symbol}
+                className="h-9 w-9 mr-2 rounded-md"
+                src={buyTokenInfo.logoURI}
+              />
+              <span>{formatUnits(quote.buyAmount, buyTokenInfo.decimals)}</span>
+              <div className="ml-2">{buyTokenInfo.symbol}</div>
+            </div>
+          )}
         </div>
+
         <div className="bg-slate-200 dark:bg-slate-800 p-4 rounded-sm mb-3">
           <div className="text-slate-400">
             {quote && quote.grossBuyAmount
               ? "Affiliate Fee: " +
-                Number(
-                  formatUnits(
-                    BigInt(quote.grossBuyAmount),
-                    buyTokenInfo.decimals
-                  )
-                ) *
-                  AFFILIATE_FEE +
-                " " +
-                buyTokenInfo.symbol
+              Number(
+                formatUnits(
+                  BigInt(quote.grossBuyAmount),
+                  buyTokenInfo.decimals
+                )
+              ) *
+              AFFILIATE_FEE +
+              " " +
+              buyTokenInfo.symbol
               : null}
           </div>
         </div>
