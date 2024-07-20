@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const config = createConfig(
   getDefaultConfig({
     // Required API Keys
-    alchemyId: "MzUaa0A87yexjd8UKcHm8HIr1f4aghxT",
+    alchemyId: "scLsqbN6qo_nOptf9abwEsi65ohb8uTL",
     walletConnectProjectId: "a8024e8262cb4e7102941a3577b5a5c0",
 
     // Required
