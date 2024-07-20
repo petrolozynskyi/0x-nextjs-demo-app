@@ -207,15 +207,15 @@ export default function PriceView({
         <div className="text-slate-400">
           {price && price.grossBuyAmount
             ? "Affiliate Fee: " +
-              Number(
-                formatUnits(
-                  BigInt(price.grossBuyAmount),
-                  POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals
-                )
-              ) *
-                AFFILIATE_FEE +
-              " " +
-              POLYGON_TOKENS_BY_SYMBOL[buyToken].symbol
+            Number(
+              formatUnits(
+                BigInt(price.grossBuyAmount),
+                POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals
+              )
+            ) *
+            AFFILIATE_FEE +
+            " " +
+            POLYGON_TOKENS_BY_SYMBOL[buyToken].symbol
             : null}
         </div>
       </div>
