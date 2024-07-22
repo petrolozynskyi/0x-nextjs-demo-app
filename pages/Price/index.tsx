@@ -31,37 +31,12 @@ interface PriceRequestParams {
 const AFFILIATE_FEE = 0.01; // Percentage of the buyAmount that should be attributed to feeRecipient as affiliate fees
 const FEE_RECIPIENT = "0x75A94931B81d81C7a62b76DC0FcFAC77FbE1e917"; // The ETH address that should receive affiliate fees
 
-async function getTokenTransfers(txHash: string): Promise<number> {
-  const apiKey = 'I8NNUZD7VJQR54EWBZPGPQCAKSCN9FQYGH'; // Replace with your PolygonScan API key
-  const response = await fetch(`https://api.polygonscan.com/api?module=account&action=tokentx&address=${txHash}&apikey=${apiKey}`);
-  const data = await response.json();
-
-  if (data.result) {
-    return data.result.length; // Number of ERC-20 token transfers
-  }
-
-  return 0;
-}
-
-export const fetcher = async ([endpoint, params]: [string, PriceRequestParams]) => {
-  const { sellAmount, buyAmount, takerAddress, sellToken, buyToken } = params;
+export const fetcher = ([endpoint, params]: [string, PriceRequestParams]) => {
+  const { sellAmount, buyAmount } = params;
   if (!sellAmount && !buyAmount) return;
-
-  // Fetch price data
   const query = qs.stringify(params);
-  const priceResponse = await fetch(`${endpoint}?${query}`);
-  const priceData = await priceResponse.json();
 
-  if (priceData && priceData.transactionHash) {
-    // Fetch and count token transfers
-    const transfersCount = await getTokenTransfers(priceData.transactionHash);
-    return {
-      ...priceData,
-      erc20TokensTransferred: transfersCount
-    };
-  }
-
-  return priceData;
+  return fetch(`${endpoint}?${query}`).then((res) => res.json());
 };
 
 export default function PriceView({
@@ -116,7 +91,6 @@ export default function PriceView({
         takerAddress,
         feeRecipient: FEE_RECIPIENT,
         buyTokenPercentageFee: AFFILIATE_FEE,
-
       },
     ],
     fetcher,
@@ -233,15 +207,15 @@ export default function PriceView({
         <div className="text-slate-400">
           {price && price.grossBuyAmount
             ? "Affiliate Fee: " +
-            Number(
-              formatUnits(
-                BigInt(price.grossBuyAmount),
-                POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals
-              )
-            ) *
-            AFFILIATE_FEE +
-            " " +
-            POLYGON_TOKENS_BY_SYMBOL[buyToken].symbol
+              Number(
+                formatUnits(
+                  BigInt(price.grossBuyAmount),
+                  POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals
+                )
+              ) *
+                AFFILIATE_FEE +
+              " " +
+              POLYGON_TOKENS_BY_SYMBOL[buyToken].symbol
             : null}
         </div>
       </div>
